@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: User Registration API
+  version: 1.0.0
+paths:
+  /users:
+    post:
+      summary: Register a new user
+      parameters:
+        - name: X-Request-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-z0-9\-]+$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - age
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                age:
+                  type: integer
+                  minimum: 18
+      responses:
+        '201':
+          description: User created successfully

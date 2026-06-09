@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: Testing OAS Tag Parser
+  version: 1.0.0
+paths:
+  /users/{userId}:
+    get:
+      summary: Get user details
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: "<!MASKED> The unique identifier for the user. Unique tag: <!ATTR:Special>"
+          schema:
+            type: string
+        - name: includeHistory
+          in: query
+          required: false
+          description: "Query flag to include full history data. Tagged as <!RENDER>"
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+    post:
+      summary: Update user profile
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: "The target user identifier <!ATTR:Special>"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+components:
+  schemas:
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: "Standard account login name. Type: <!ATTR:Normal>"
+        password:
+          type: string
+          description: "Plain text credential field requiring masking. Tagged: <!MASKED>"
+        profile:
+          type: object
+          properties:
+            bio:
+              type: string
+              description: "Public bio summary metadata. Render option: <!RENDER>"
+            paymentDetails:
+              type: object
+              properties:
+                cardNumber:
+                  type: string
+                  description: "Strictly secure data entry point <!MASKED>"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Returned object system ID. Type: <!ATTR:Normal>"
+        maskedEmail:
+          type: string
+          description: "Partially obfuscated email property. Flag: <!MASKED>"
+        preferences:
+          type: array
+          items:
+            type: string
+            description: "Array of display preference strings. Tag: <!RENDER>"

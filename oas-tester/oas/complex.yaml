@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Deeply Nested and Complex Test OAS
+  version: 2.0.0
+paths:
+  /api/v1/organizations/{orgId}/departments/{deptCode}:
+    get:
+      summary: Retrieve complex organizational tree structure
+      operationId: getOrgTree
+      parameters:
+        - $ref: '#/components/parameters/OrgIdParam'
+        - name: deptCode
+          in: path
+          required: true
+          description: "Department structural alphanumeric code. Tag: <!ATTR:Special>"
+          schema:
+            type: string
+        - name: filterStatus
+          in: query
+          required: false
+          description: "Array of processing filters to evaluate. Tag: <!RENDER>"
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: Multi-layered structure map response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationReport'
+
+    post:
+      summary: Batch update organizational resource nodes
+      operationId: batchUpdateNodes
+      parameters:
+        - $ref: '#/components/parameters/OrgIdParam'
+        - name: deptCode
+          in: path
+          required: true
+          description: "Department target modifier. Tag: <!ATTR:Normal>"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchUpdateRequest'
+      responses:
+        '201':
+          description: Node batch processing confirmation matrix
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionId:
+                    type: string
+                    description: "Global tracking token. Tag: <!ATTR:Special>"
+                  executionSummary:
+                    $ref: '#/components/schemas/ProcessingMetrics'
+
+components:
+  parameters:
+    OrgIdParam:
+      name: orgId
+      in: path
+      required: true
+      description: "Root organization identifier token. Tag: <!ATTR:Special>"
+      schema:
+        type: string
+
+  schemas:
+    # --- Response Tree Structures ---
+    OrganizationReport:
+      type: object
+      properties:
+        reportId:
+          type: string
+          description: "System generated structural report marker. Tag: <!ATTR:Normal>"
+        corporateEntity:
+          $ref: '#/components/schemas/EntityDetails'
+        financialMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricNode'
+
+    EntityDetails:
+      type: object
+      properties:
+        legalName:
+          type: string
+          description: "Registered compliance name string. Tag: <!RENDER>"
+        taxRegistration:
+          type: object
+          properties:
+            ein:
+              type: string
+              description: "Federal employment identification number. Tag: <!MASKED>"
+            jurisdictionCode:
+              type: string
+              description: "Regional legal authority routing code. Tag: <!ATTR:Normal>"
+
+    MetricNode:
+      type: object
+      properties:
+        fiscalYear:
+          type: string
+          description: "Target economic performance cycle. Tag: <!ATTR:Normal>"
+        quarterlyBreakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              quarterIndex:
+                type: integer
+                description: "Sequential quarter identifier (1-4). Tag: <!RENDER>"
+              revenueLedger:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rawAmount:
+                      type: number
+                      description: "Unmasked baseline total value currency. Tag: <!ATTR:Special>"
+                    obfuscatedHash:
+                      type: string
+                      description: "Secure signing cryptographic block footprint. Tag: <!MASKED>"
+
+    # --- Request Payload Structures ---
+    BatchUpdateRequest:
+      type: object
+      properties:
+        initiatedBy:
+          type: string
+          description: "Actor operational signature context. Tag: <!ATTR:Normal>"
+        payloadMatrix:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateItem'
+
+    UpdateItem:
+      type: object
+      properties:
+        actionType:
+          type: string
+          description: "Instructional mutation strategy framework. Tag: <!RENDER>"
+        securityContext:
+          type: object
+          properties:
+            apiKeySecret:
+              type: string
+              description: "Ingress handshake access control vector. Tag: <!MASKED>"
+            clientCertThumbprint:
+              type: string
+              description: "Public key infrastructure node identifier. Tag: <!ATTR:Special>"
+        nestedGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              groupId:
+                type: string
+                description: "Array item leaf sub-group tracker token. Tag: <!ATTR:Normal>"
+
+    ProcessingMetrics:
+      type: object
+      properties:
+        durationMs:
+          type: integer
+          description: "Parser time metrics profile. Tag: <!RENDER>"
+        systemAlerts:
+          type: array
+          items:
+            type: string
+            description: "Logging anomaly stream alerts block. Tag: <!MASKED>"
