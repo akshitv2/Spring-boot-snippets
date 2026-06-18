@@ -17,8 +17,8 @@ dependencies {
     // Source: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
 //    implementation("org.springframework.boot:spring-boot-starter-web:4.0.6")
 
-//    implementation 'com.atlassian.oai:openapi-request-validator-core:2.43.0'
-//    implementation 'com.atlassian.oai:openapi-request-validator-springmvc:2.43.0'
+
+    implementation("com.atlassian.oai:swagger-request-validator-core:2.46.1")
     implementation 'io.swagger.parser.v3:swagger-parser:2.1.22'
 }
 
